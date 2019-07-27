@@ -15,3 +15,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+#app {
+  background: #f0f4f4;
+}
+</style>
+
