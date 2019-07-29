@@ -33,7 +33,7 @@
                         <v-list-tile
                           v-for="travelDate in dateList"
                           :key="travelDate"
-                          @click="addStroke(travel.title,travelDate)"
+                          @click="addStroke(travel,travelDate)"
                         >
                           <v-list-tile-title>{{ travelDate }}</v-list-tile-title>
                         </v-list-tile>
@@ -50,31 +50,39 @@
 
     <v-tooltip left>
       <template v-slot:activator="{ on }">
-        <v-btn
-          fixed
-          dark
-          fab
-          bottom
-          right
-          color="eBlue"
-          id="stroke"
-          v-on="on"
-          @click="drawer =!drawer"
-        >
+        <v-btn fixed dark fab bottom right color="eBlue" id="stroke" v-on="on" @click="openDrawer">
           <v-icon>storage</v-icon>
         </v-btn>
       </template>
       <span>規劃行程</span>
     </v-tooltip>
 
-    <v-navigation-drawer v-model="drawer" app temporary class="indigo">
-      <v-layout column align-center>
-        <v-flex class="mt-5">
-          <v-sheet elevation="10" class="py-4 px-1">
-            <v-chip-group mandatory active-class="eBlue--text">
-              <v-chip v-for="tag in tags" :key="tag">{{ tag }}</v-chip>
-            </v-chip-group>
-          </v-sheet>
+    <v-navigation-drawer v-model="drawer" app temporary class="eGreen1">
+      <v-layout row column>
+        <v-flex md12 class="text-md-center">
+          <v-btn icon flat @click="changeIndex(-1)">
+            <v-icon>chevron_left</v-icon>
+          </v-btn>
+
+          <p class="d-inline-block">{{ strokeDate[index] }}</p>
+
+          <v-btn icon flat @click="changeIndex(1)">
+            <v-icon>chevron_right</v-icon>
+          </v-btn>
+        </v-flex>
+
+        <v-flex md12 pa-3>
+          <v-card v-for="travel in selectTravel[currentDate]" :key="travel.title">
+            <v-img class="white--text" height="200px" :src="travel.src">
+              <v-card-title class="align-end fill-height">{{ travel.title}}</v-card-title>
+            </v-img>
+            <v-card-text>
+              {{ travel.title}}
+              <v-btn flat fab color="eRed">
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </v-card-text>
+          </v-card>
         </v-flex>
       </v-layout>
     </v-navigation-drawer>
@@ -141,39 +149,44 @@ export default {
             "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
         }
       ],
-      items: [
-        { title: "Click Me" },
-        { title: "Click Me1" },
-        { title: "Click Me3" },
-        { title: "Click Me 2" }
-      ],
       selectTravel: {},
-      tags: [
-        "Work",
-        "Home Improvement",
-        "Vacation",
-        "Food",
-        "Drawers",
-        "Shopping",
-        "Art",
-        "Tech",
-        "Creative Writing"
-      ]
+      strokeDate: [],
+      index: 0
     };
   },
   computed: {
     dateList() {
       let interval = getDateDiff(this.date_S, this.date_E);
+      this.strokeDate = interval;
       return interval;
+    },
+    total() {
+      return this.strokeDate.length;
+    },
+    currentDate() {
+      return this.strokeDate[this.index];
     }
   },
   methods: {
-    addStroke(travelName, travelDate) {
+    addStroke(travel, travelDate) {
       if (!this.selectTravel[travelDate]) {
-        this.selectTravel[travelDate] = [travelName];
+        this.selectTravel[travelDate] = [travel];
       } else {
-        this.selectTravel[travelDate].push(travelName);
+        this.selectTravel[travelDate].push(travel);
       }
+    },
+    openDrawer() {
+      this.drawer = !this.drawer;
+      this.index = 0;
+    },
+    deleteStroke(index, stroke, strokeIndex) {
+      this.selectTravel[stroke].splice(index, 1);
+      if (this.selectTravel[stroke].length === 0) {
+        this.strokeDate.splice(strokeIndex, 1);
+      }
+    },
+    changeIndex(change) {
+      this.index = (this.index + change + this.total) % this.total;
     }
   }
 };
@@ -186,5 +199,9 @@ export default {
   &#star {
     bottom: 40vh;
   }
+}
+
+.v-carousel {
+  text-align: center;
 }
 </style>
