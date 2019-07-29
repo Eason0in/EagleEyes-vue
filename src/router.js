@@ -20,6 +20,12 @@ export default new Router({
       name: 'package',
       props: true,
       component: () => import(/* webpackChunkName: "about" */ './views/Package.vue')
+    },
+    {
+      path: '/stroke',
+      name: 'stroke',
+      props: true,
+      component: () => import(/* webpackChunkName: "about" */ './views/Stroke.vue')
     }
   ]
 })
