@@ -275,7 +275,17 @@ export default {
       this.index = 0;
     },
     deleteStroke(travel, strokeIndex) {
-      this.$delete(this.selectTravel[this.currentDate], strokeIndex);
+      //把剩下的留著
+      const lessStroke = this.selectTravel[this.currentDate];
+      const newArr = lessStroke.filter((item, index) => {
+        return index !== strokeIndex;
+      });
+
+      //刪除整個日期
+      this.$delete(this.selectTravel, this.currentDate);
+
+      //重新設定日期的景點
+      this.$set(this.selectTravel, this.currentDate, newArr);
     },
     changeIndex(change) {
       this.index = (this.index + change + this.total) % this.total;
