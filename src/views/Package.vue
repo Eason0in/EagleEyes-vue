@@ -9,18 +9,29 @@
     <v-layout row wrap class="mt-4">
       <v-flex md12>
         <v-tabs v-model="active" grow>
-          <v-tab v-for="item in strokeDate" :key="item" ripple dark class="eWhite">{{ item }}</v-tab>
+          <v-tab
+            v-for="recommendTab in recommendTabs"
+            :key="recommendTab"
+            ripple
+            dark
+            class="eWhite"
+          >{{ recommendTab }}</v-tab>
 
-          <v-tab-item v-for="item in strokeDate" :key="item" class="mt-4">
+          <v-tab-item v-for="recommendTab in recommendTabs" :key="recommendTab" class="mt-4">
             <v-layout row wrap>
-              <v-flex md3 class="pa-2" v-for="travel in travels" :key="travel.title">
+              <v-flex
+                md3
+                class="pa-2"
+                v-for="recommendItem in recommendItems[recommendTab]"
+                :key="recommendItem.title"
+              >
                 <v-card>
-                  <v-img class="white--text" height="200px" :src="travel.src">
-                    <v-card-title class="align-end fill-height">{{ travel.title}}</v-card-title>
+                  <v-img class="white--text" height="200px" :src="recommendItem.src">
+                    <v-card-title class="align-end fill-height">{{ recommendItem.title}}</v-card-title>
                   </v-img>
-                  <v-card-text>{{ travel.title}}</v-card-text>
+                  <v-card-text>{{ recommendItem.title}}</v-card-text>
                   <v-card-actions>
-                    <v-btn flat fab color="eRed" @click="addFavorite(travel)">
+                    <v-btn flat fab color="eRed" @click="addFavorite(recommendItem)">
                       <v-icon>favorite</v-icon>
                     </v-btn>
 
@@ -34,7 +45,7 @@
                         <v-list-tile
                           v-for="travelDate in strokeDate"
                           :key="travelDate"
-                          @click="addStroke(travel,travelDate)"
+                          @click="addStroke(recommendItem,travelDate)"
                         >
                           <v-list-tile-title>{{ travelDate }}</v-list-tile-title>
                         </v-list-tile>
@@ -173,52 +184,69 @@ export default {
       active: null,
       drawerStroke: false,
       drawerFavortie: false,
-      travels: [
-        {
-          title: "台東",
-          src:
-            "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
-        },
-        {
-          title: "台中",
-          src:
-            "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
-        },
-        {
-          title: "新竹",
-          src:
-            "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
-        },
-        {
-          title: "新",
-          src:
-            "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
-        },
-        {
-          title: "台東1",
-          src:
-            "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
-        },
-        {
-          title: "台中s",
-          src:
-            "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
-        },
-        {
-          title: "新竹s",
-          src:
-            "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
-        },
-        {
-          title: "新a",
-          src:
-            "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
-        }
-      ],
+      recommendItems: {
+        推薦美食: [
+          {
+            title: "台東",
+            src: "https://picsum.photos/id/77/1920/1080"
+          },
+          {
+            title: "台中",
+            src: "https://picsum.photos/id/71/1920/1080"
+          }
+        ],
+        "近期活動/票券": [
+          {
+            title: "新竹",
+            src: "https://picsum.photos/id/62/1920/1080"
+          },
+          {
+            title: "新",
+            src: "https://picsum.photos/id/83/1920/1080"
+          }
+        ],
+        風景: [
+          {
+            title: "台東1",
+            src: "https://picsum.photos/id/120/1920/1080"
+          },
+          {
+            title: "台中s",
+            src: "https://picsum.photos/id/149/1920/1080"
+          }
+        ],
+        購物: [
+          {
+            title: "新竹s",
+            src: "https://picsum.photos/id/142/1920/1080"
+          },
+          {
+            title: "新a",
+            src: "https://picsum.photos/id/122/1920/1080"
+          }
+        ],
+        Hotelscombined訂房推薦: [
+          {
+            title: "新竹s",
+            src: "https://picsum.photos/id/179/1920/1080"
+          },
+          {
+            title: "新a",
+            src: "https://picsum.photos/id/162/1920/1080"
+          }
+        ]
+      },
       selectTravel: {},
       strokeDate: getDateDiff(this.date_S, this.date_E),
       index: 0,
-      favoriteList: []
+      favoriteList: [],
+      recommendTabs: [
+        "推薦美食",
+        "近期活動/票券",
+        "風景",
+        "購物",
+        "Hotelscombined訂房推薦"
+      ]
     };
   },
   computed: {
@@ -260,7 +288,10 @@ export default {
     },
     getStrokPage() {
       this.$router.push({
-        name: "stroke"
+        name: "stroke",
+        params: {
+          strokeDate: JSON.stringify(this.strokeDate)
+        }
       });
       this.$bus.$emit("changeStep", { stepNum: 3 });
     }

@@ -22,7 +22,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/Package.vue')
     },
     {
-      path: '/stroke',
+      path: '/stroke/:strokeDate',
       name: 'stroke',
       props: true,
       component: () => import(/* webpackChunkName: "about" */ './views/Stroke.vue')
