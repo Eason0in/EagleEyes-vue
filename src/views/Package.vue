@@ -175,7 +175,9 @@
 </template>
 
 <script>
+import axios from "axios";
 import { getDateDiff } from "../js/dateFuns";
+const API_BASIC = "http://13.230.140.253";
 export default {
   name: "Package",
   props: ["city", "target", "date_S", "date_E"],
@@ -195,7 +197,7 @@ export default {
             src: "https://picsum.photos/id/71/1920/1080"
           }
         ],
-        "近期活動/票券": [
+        近期活動: [
           {
             title: "新竹",
             src: "https://picsum.photos/id/62/1920/1080"
@@ -242,11 +244,13 @@ export default {
       favoriteList: [],
       recommendTabs: [
         "推薦美食",
-        "近期活動/票券",
+        "近期活動",
         "風景",
         "購物",
         "Hotelscombined訂房推薦"
-      ]
+      ],
+      food: [],
+      activity: []
     };
   },
   computed: {
@@ -305,6 +309,19 @@ export default {
       });
       this.$bus.$emit("changeStep", { stepNum: 3 });
     }
+  },
+  mounted() {
+    axios
+      .get(API_BASIC + "/api/v1/querys/search?keyword=台北美食")
+      .then(res => {
+        this.food = res.data;
+        console.log(this.food);
+      })
+      .catch(error => {
+        console.log(error);
+        // this.errored = true;
+      });
+    //.finally(() => this.loading = false)
   }
 };
 </script>
