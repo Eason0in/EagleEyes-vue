@@ -10,47 +10,33 @@
       <v-flex md12>
         <v-tabs v-model="active" grow>
           <v-tab
-            v-for="recommendTab in recommendTabs"
-            :key="recommendTab"
+            v-for="tabName in tabNames"
+            :key="tabName.zh"
             ripple
             dark
             class="eWhite"
-          >{{ recommendTab }}</v-tab>
+          >{{ tabName.zh }}</v-tab>
 
-          <v-tab-item v-for="recommendTab in recommendTabs" :key="recommendTab" class="mt-4">
+          <v-tab-item v-for="tabName in tabNames" :key="tabName.zh" class="mt-4">
             <v-layout row wrap>
-              <v-flex
-                md3
-                class="pa-2"
-                v-for="recommendItem in recommendItems[recommendTab]"
-                :key="recommendItem.title"
-              >
+              <!-- 讀條
+                <v-flex md12 v-show="foodLoading">
+                <v-progress-linear color="eGreen2" indeterminate rounded height="6"></v-progress-linear>
+              </v-flex>-->
+              <v-flex md3 class="pa-2" v-for="(item,index) in getTabData(tabName.en)" :key="index">
                 <v-card>
-                  <v-img class="white--text" height="200px" :src="recommendItem.src">
-                    <v-card-title class="align-end fill-height">{{ recommendItem.title}}</v-card-title>
+                  <v-img class="white--text" height="200px" :src="item.image">
+                    <v-card-title class="align-end fill-height">{{ item.title}}</v-card-title>
                   </v-img>
-                  <v-card-text>{{ recommendItem.title}}</v-card-text>
+                  <v-card-text class="one-line">{{ item.title}}</v-card-text>
                   <v-card-actions>
-                    <v-btn flat fab color="eRed" @click="addFavorite(recommendItem)">
+                    <v-btn flat fab color="eRed" @click="addFavorite(item)">
                       <v-icon>favorite</v-icon>
                     </v-btn>
 
-                    <v-menu offset-y open-on-hover>
-                      <template v-slot:activator="{ on }">
-                        <v-btn flat fab color="eRed" v-on="on">
-                          <v-icon large>add</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-tile
-                          v-for="travelDate in strokeDate"
-                          :key="travelDate"
-                          @click="addStroke(recommendItem,travelDate)"
-                        >
-                          <v-list-tile-title>{{ travelDate }}</v-list-tile-title>
-                        </v-list-tile>
-                      </v-list>
-                    </v-menu>
+                    <v-btn flat fab color="eRed" @click="addStroke(item)">
+                      <v-icon large>add</v-icon>
+                    </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-flex>
@@ -82,26 +68,14 @@
 
     <v-navigation-drawer v-model="drawerStroke" app temporary class="eGreen1 lighten-2">
       <v-layout column>
-        <v-flex md12 class="text-md-center">
-          <v-btn icon flat @click="changeIndex(-1)">
-            <v-icon>chevron_left</v-icon>
-          </v-btn>
-
-          <p class="d-inline-block">{{ strokeDate[index] }}</p>
-
-          <v-btn icon flat @click="changeIndex(1)">
-            <v-icon>chevron_right</v-icon>
-          </v-btn>
-        </v-flex>
-
-        <v-flex md12 pa-3>
-          <v-card v-for="(travel,i) in selectTravel[currentDate]" :key="travel.title">
-            <v-img class="white--text" height="200px" :src="travel.src">
+        <v-flex md12 class="pa-2">
+          <v-card class="pb-2" v-for="(travel,i) in selectTravel" :key="travel.title">
+            <v-img class="white--text" height="200px" :src="travel.image">
               <v-card-title class="align-end fill-height">{{ travel.title}}</v-card-title>
             </v-img>
             <v-card-text>
               {{ travel.title}}
-              <v-btn flat fab color="eRed" @click="deleteStroke(travel,i)">
+              <v-btn flat fab color="eRed" @click="deleteStroke(i)">
                 <v-icon>delete</v-icon>
               </v-btn>
             </v-card-text>
@@ -138,32 +112,19 @@
     </v-tooltip>
 
     <v-navigation-drawer v-model="drawerFavortie" app temporary class="eRed lighten-3">
-      <v-layout row column>
-        <v-flex md3 class="pa-2" v-for="(travel,favoriteIndex) in favoriteList" :key="travel.title">
+      <v-layout column>
+        <v-flex md3 class="pa-2" v-for="(travel,Index) in favoriteList" :key="travel.title">
           <v-card>
-            <v-img class="white--text" height="200px" :src="travel.src">
+            <v-img class="white--text" height="200px" :src="travel.image">
               <v-card-title class="align-end fill-height">{{ travel.title}}</v-card-title>
             </v-img>
             <v-card-text>{{ travel.title}}</v-card-text>
             <v-card-actions>
-              <v-menu offset-y open-on-hover>
-                <template v-slot:activator="{ on }">
-                  <v-btn flat fab color="eRed" v-on="on">
-                    <v-icon large>add</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-tile
-                    v-for="travelDate in strokeDate"
-                    :key="travelDate"
-                    @click="addStroke(travel,travelDate,favoriteIndex)"
-                  >
-                    <v-list-tile-title>{{ travelDate }}</v-list-tile-title>
-                  </v-list-tile>
-                </v-list>
-              </v-menu>
+              <v-btn flat fab color="eRed" @click="addStroke(travel,index)">
+                <v-icon large>add</v-icon>
+              </v-btn>
 
-              <v-btn flat fab color="eRed" @click="deleteFavorite(favoriteIndex)">
+              <v-btn flat fab color="eRed" @click="deleteFavorite(Index)">
                 <v-icon>delete</v-icon>
               </v-btn>
             </v-card-actions>
@@ -176,81 +137,31 @@
 
 <script>
 import axios from "axios";
-import { getDateDiff } from "../js/dateFuns";
 const API_BASIC = "http://13.230.140.253";
 export default {
   name: "Package",
   props: ["city", "target", "date_S", "date_E"],
   data() {
     return {
-      active: null,
+      active: -1,
       drawerStroke: false,
       drawerFavortie: false,
-      recommendItems: {
-        推薦美食: [
-          {
-            title: "台東",
-            src: "https://picsum.photos/id/77/1920/1080"
-          },
-          {
-            title: "台中",
-            src: "https://picsum.photos/id/71/1920/1080"
-          }
-        ],
-        近期活動: [
-          {
-            title: "新竹",
-            src: "https://picsum.photos/id/62/1920/1080"
-          },
-          {
-            title: "新",
-            src: "https://picsum.photos/id/83/1920/1080"
-          }
-        ],
-        風景: [
-          {
-            title: "台東1",
-            src: "https://picsum.photos/id/120/1920/1080"
-          },
-          {
-            title: "台中s",
-            src: "https://picsum.photos/id/149/1920/1080"
-          }
-        ],
-        購物: [
-          {
-            title: "新竹s",
-            src: "https://picsum.photos/id/142/1920/1080"
-          },
-          {
-            title: "新a",
-            src: "https://picsum.photos/id/122/1920/1080"
-          }
-        ],
-        Hotelscombined訂房推薦: [
-          {
-            title: "新竹s",
-            src: "https://picsum.photos/id/179/1920/1080"
-          },
-          {
-            title: "新a",
-            src: "https://picsum.photos/id/162/1920/1080"
-          }
-        ]
-      },
-      selectTravel: {},
-      strokeDate: getDateDiff(this.date_S, this.date_E),
+      foodLoading: true,
+      tabNames: [
+        { en: "foods", zh: "美食" },
+        { en: "activties", zh: "活動" },
+        { en: "scapes", zh: "風景" },
+        { en: "shoppings", zh: "購物" },
+        { en: "hotels", zh: "Hotelscombined訂房推薦" }
+      ],
+      selectTravel: [],
       index: 0,
       favoriteList: [],
-      recommendTabs: [
-        "推薦美食",
-        "近期活動",
-        "風景",
-        "購物",
-        "Hotelscombined訂房推薦"
-      ],
-      food: [],
-      activity: []
+      foods: [],
+      activties: [],
+      scapes: [],
+      shoppings: [],
+      hotels: []
     };
   },
   computed: {
@@ -262,43 +173,25 @@ export default {
     }
   },
   methods: {
-    addStroke(travel, travelDate, favoriteIndex) {
-      if (!this.selectTravel[travelDate]) {
-        this.selectTravel[travelDate] = [travel];
-      } else {
-        this.selectTravel[travelDate].push(travel);
-      }
+    addStroke(travel, index) {
+      this.selectTravel.push(travel);
 
-      //如果是在我的最愛加入列表後將項目在我的最愛裡移除
       if (this.drawerFavortie) {
-        this.deleteFavorite(favoriteIndex);
+        this.deleteFavorite(index);
       }
     },
     openDrawer() {
       this.drawerStroke = !this.drawerStroke;
       this.index = 0;
     },
-    deleteStroke(travel, strokeIndex) {
-      //把剩下的留著
-      const lessStroke = this.selectTravel[this.currentDate];
-      const newArr = lessStroke.filter((item, index) => {
-        return index !== strokeIndex;
-      });
-
-      //刪除整個日期
-      this.$delete(this.selectTravel, this.currentDate);
-
-      //重新設定日期的景點
-      this.$set(this.selectTravel, this.currentDate, newArr);
-    },
-    changeIndex(change) {
-      this.index = (this.index + change + this.total) % this.total;
+    deleteStroke(Index) {
+      this.$delete(this.selectTravel, Index);
     },
     addFavorite(travel) {
       this.favoriteList.push(travel);
     },
-    deleteFavorite(favoriteIndex) {
-      this.$delete(this.favoriteList, favoriteIndex);
+    deleteFavorite(Index) {
+      this.$delete(this.favoriteList, Index);
     },
     getStrokPage() {
       this.$router.push({
@@ -308,20 +201,61 @@ export default {
         }
       });
       this.$bus.$emit("changeStep", { stepNum: 3 });
+    },
+    setTabDatas() {
+      for (const tabName of this.tabNames) {
+        axios
+          .get(
+            API_BASIC +
+              "/api/v1/querys/search?keyword=" +
+              this.city +
+              tabName.zh
+          )
+          .then(res => {
+            this.setData(tabName.en, res.data);
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      }
+    },
+    setData(en, data) {
+      switch (en) {
+        case "foods":
+          this.active = 0;
+          this.foods = data;
+          this.foodLoading = false;
+          break;
+        case "activties":
+          this.activties = data;
+          break;
+        case "scapes":
+          this.scapes = data;
+          break;
+        case "shoppings":
+          this.shoppings = data;
+          break;
+      }
+    },
+    getTabData(en) {
+      switch (en) {
+        case "foods":
+          return this.foods;
+        case "activties":
+          return this.activties;
+        case "scapes":
+          return this.scapes;
+        case "shoppings":
+          return this.shoppings;
+      }
     }
   },
-  mounted() {
-    axios
-      .get(API_BASIC + "/api/v1/querys/search?keyword=台北美食")
-      .then(res => {
-        this.food = res.data;
-        console.log(this.food);
-      })
-      .catch(error => {
-        console.log(error);
-        // this.errored = true;
-      });
-    //.finally(() => this.loading = false)
+  watch: {
+    // call again the method if the route changes
+    $route: "setTabDatas"
+  },
+  created() {
+    this.setTabDatas();
   }
 };
 </script>
@@ -337,5 +271,11 @@ export default {
 
 .v-carousel {
   text-align: center;
+}
+
+.one-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
