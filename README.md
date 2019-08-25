@@ -1,6 +1,6 @@
 # EagleEyes-規劃旅遊行程的好夥伴
 
-[Demo](https://ee-vue-inwyusi0o.now.sh/#/)
+[Demo](https://ee-vue.leoling127.now.sh/)
 
 此專案依照地區、期間、旅遊目的提供使用者一套人氣景點行程表
 
