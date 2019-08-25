@@ -1,29 +1,39 @@
-# ee-vue
+# EagleEyes-規劃旅遊行程的好夥伴
 
-## Project setup
-```
-npm install
-```
+[Demo](https://ee-vue-inwyusi0o.now.sh/#/)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+此專案依照地區、期間、旅遊目的提供使用者一套人氣景點行程表
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## 功能列表
 
-### Run your tests
-```
-npm run test
-```
+- 依照地區作城市的選擇
+- 依照期間及旅遊目的作推薦行程的條件
+- 檢視推薦美食、近期活動/票券、風景、購物、HotelsCombined 訂房等項目
+  - 點選 :heavy_plus_sign: 增加此景點至行程規劃清單
+- 點選 📑 查看目前行程規劃清單
+  - 點選 :wastebasket: 刪除行程
+  - 點選`GET 行程`可以取得行程規劃表
+- 點選 :star: 查看目前收藏的行程清單
+  - 點選 :wastebasket: 刪除行程
+- 檢視行程規劃表
+  - 點選日期項目可以看到當天景點
+  - 點選節點可以看到景點詳細資訊
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Screen Photo
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![step1](/img/step1.JPG)
+![step2](/img/step2.JPG)
+![step2-add_to_stroke](/img/step2-add_to_stroke.JPG)
+![step2-add_to_favorite](/img/step2-add_to_favorite.JPG)
+![step3](/img/step3.JPG)
+
+## 使用工具
+
+- [Visual Studio Code](https://visualstudio.microsoft.com/zh-hant/) - 開發環境
+- [Vue](https://vuejs.org/) - 前端 Framework
+- [Vuetify](https://vuetifyjs.com/en/) - Material Design Component Framework
+- [Materialize](https://materializecss.com/) - A modern responsive front-end framework
+
+## 致謝
+
+- [開發者](https://github.com/kelly-yt-liao/Pixnet2019_AITravelBot_EagleEyes)- EagleEyes 團隊 : `Yuting Liao` , `健文` , `Bruce` , `Walle` , `Eason`
