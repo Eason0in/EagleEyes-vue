@@ -209,7 +209,6 @@ export default {
   computed: {
     steps() {
       let currentDate = this.strokeDates[this.activeDate];
-      console.log("currentDate", currentDate);
       if (isUndefined(this.strokes[currentDate])) {
         // eslint-disable-next-line
         this.e1 = 0;
