@@ -78,14 +78,15 @@
 
 <script>
 import { isUndefined } from "util";
+import { getDateDiff } from "../js/dateFuns";
 
 export default {
-  props: ["strokeDate"],
+  props: ["selectTravel", "date_S", "date_E"],
   data() {
     return {
-      strokeDates: JSON.parse(this.strokeDate),
+      strokeDates: getDateDiff(this.date_S, this.date_E),
       strokes: {
-        "2019-07-31": [
+        "2019-08-25": [
           {
             title: "台東",
             src:
@@ -95,9 +96,99 @@ export default {
             title: "台北",
             src:
               "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "新竹",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
           }
         ],
-        "2019-08-01": [
+        "2019-08-26": [
+          {
+            title: "台東",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "台北",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "新竹",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          }
+        ],
+        "2019-08-27": [
+          {
+            title: "台東",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "台北",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "新竹",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          }
+        ],
+        "2019-08-28": [
+          {
+            title: "台東",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "台北",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "新竹",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          }
+        ],
+        "2019-08-29": [
+          {
+            title: "台東",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "台北",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "新竹",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          }
+        ],
+        "2019-08-30": [
+          {
+            title: "台東",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "台北",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          },
+          {
+            title: "新竹",
+            src:
+              "https://pic.pimg.tw/may1215may/1530409630-1869971998_n.jpg?v=1530409698"
+          }
+        ],
+        "2019-08-31": [
           {
             title: "新竹",
             src:
@@ -118,6 +209,7 @@ export default {
   computed: {
     steps() {
       let currentDate = this.strokeDates[this.activeDate];
+      console.log("currentDate", currentDate);
       if (isUndefined(this.strokes[currentDate])) {
         // eslint-disable-next-line
         this.e1 = 0;

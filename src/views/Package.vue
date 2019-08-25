@@ -137,7 +137,7 @@
 
 <script>
 import axios from "axios";
-const API_BASIC = "http://13.230.140.253";
+const API_BASIC = "https://www.bruce0815.xyz";
 export default {
   name: "Package",
   props: ["city", "target", "date_S", "date_E"],
@@ -197,7 +197,9 @@ export default {
       this.$router.push({
         name: "stroke",
         params: {
-          strokeDate: JSON.stringify(this.strokeDate)
+          selectTravel: JSON.stringify(this.selectTravel),
+          date_S: this.date_S,
+          date_E: this.date_E
         }
       });
       this.$bus.$emit("changeStep", { stepNum: 3 });
